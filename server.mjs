@@ -1,46 +1,46 @@
 import express from 'express';
 import bodyParser from 'body-parser'
-import util from './util';
+import mongoose from 'mongoose';
 import CONFIG from './config.mjs';
 
+//Setup Middleware
 const app = express();
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.static('public'));
 
+//Setup MongoDB
+mongoose.connect('mongodb://rwdavisx:liamH252!@ds259778.mlab.com:59778/sandbox-db');
+
+const Game = mongoose.model('Game', {
+    name: String,
+    rating: Number,
+    genre: String,
+});
+
+//Setup Routes
 app.get('/home', (req, res) => {
     res.send({init: true});
 });
 
+app.post('/api/games', (req, res) => {
+    console.log(req.body);
+    let game = new Game({
+        name: req.body.name,
+        rating: req.body.rating,
+        genre: req.body.genre,
+    });
+    game.save();
+    res.sendStatus(200);
+});
+
 app.get('/api/games', (req, res) => {
-    const games = {
-        games: [
-            {
-                id: '1',
-                name: 'Hearts of Iron IV',
-                img: `${util.dirFnc}./static/img/hoi.jpeg`
-            },
-            {
-                id: '2',
-                name: 'Squad',
-                img: `${util.dirFnc}./static/img/squad.png`
-            },
-            {
-                id: '3',
-                name: 'Battlefield 1',
-                img: 'http://localhost:4200/img/bf1'
-            },
-        ]
-    };
-
-    console.log(games);
-    res.send(games);
+    Game.find({}, (err, docs) => {
+        res.send({games: docs});
+    });
 });
 
-app.get('/img/bf1', (req, res) => {
-    res.sendFile('C:\\Users\\rwdav\\WebstormProjects\\client-server-demo\\static\\img\\bf1.jpg');
-});
-
+//Run Server
 app.listen(CONFIG.port, () => {
     console.log('Server listening on port ' + CONFIG.port);
 });
