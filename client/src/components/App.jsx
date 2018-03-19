@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import {GamesList} from './GameList';
-import {GameSubmission} from "./GameSubmission";
+import {GameSubmission} from "./AddGameForm";
 import {CreateGameService} from '../services/CreateGameService';
 import {GetGamesService} from '../services/GetGamesService';
 
@@ -13,14 +13,6 @@ const defaultForm = {
 };
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            games: [],
-            form: defaultForm,
-        }
-    }
-
     updateGamesList = () => {
         GetGamesService()
             .then(res => this.setState({
@@ -30,11 +22,6 @@ class App extends Component {
                 console.log(err);
             });
     };
-
-    componentDidMount() {
-        this.updateGamesList();
-    }
-
     formChanged = (event) => {
         const target = event.target;
         const field = target.name;
@@ -50,7 +37,6 @@ class App extends Component {
             form: Object.assign({}, this.state.form, {[field]: value})
         });
     };
-
     formSubmitted = (event) => {
         event.preventDefault();
         if (this.canBeSubmitted()) {
@@ -66,7 +52,6 @@ class App extends Component {
             });
         }
     };
-
     validate = (name, rating, genre) => {
         return {
             name: name.length === 0,
@@ -74,6 +59,18 @@ class App extends Component {
             genre: genre === ''
         };
     };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            games: [],
+            form: defaultForm,
+        }
+    }
+
+    componentDidMount() {
+        this.updateGamesList();
+    }
 
     canBeSubmitted() {
         const errors = this.validate(this.state.form.name, this.state.form.rating, this.state.form.genre);
