@@ -1,6 +1,7 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
-export function GameSubmission(props) {
+const AddGame = ({dispatch}) => {
     let form = props.form;
     const onChanged = props.onChanged;
     const onSubmit = props.onSubmit;
@@ -34,4 +35,6 @@ export function GameSubmission(props) {
             </form>
         </div>
     );
-}
+};
+
+export default connect()(AddGame);

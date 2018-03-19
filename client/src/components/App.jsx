@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import {GamesList} from './GameList';
-import {GameSubmission} from "./AddGameForm";
+import AddGame, {GameSubmission} from "../containers/AddGame";
 import {CreateGameService} from '../services/CreateGameService';
 import {GetGamesService} from '../services/GetGamesService';
 
@@ -37,7 +37,7 @@ class App extends Component {
             form: Object.assign({}, this.state.form, {[field]: value})
         });
     };
-    formSubmitted = (event) => {
+    gameSubmitted = (event) => {
         event.preventDefault();
         if (this.canBeSubmitted()) {
             CreateGameService(this.state.form)
@@ -86,7 +86,8 @@ class App extends Component {
                 <header className="App-header">
                     <h1>Ryan's Games</h1>
                 </header>
-                <GameSubmission form={this.state.form} onChanged={this.formChanged} onSubmit={this.formSubmitted}/><br/>
+                <AddGame submit={this.gameSubmitted}/>
+                {/*<GameSubmission form={this.state.form} onChanged={this.formChanged} onSubmit={this.gameSubmitted}/><br/>*/}
                 <GamesList games={this.state.games}/>
             </div>
         );
