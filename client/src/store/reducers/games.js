@@ -1,4 +1,4 @@
-import {ADD_GAME, UPDATED_GAMES} from '../actions/index'
+import {ADD_GAME, UPDATE_GAMES, UPDATED_GAMES} from '../actions/index'
 import {CreateGameService} from '../../services/CreateGameService';
 import {GetGamesService} from "../../services/GetGamesService";
 
@@ -18,6 +18,9 @@ const games = (state = defaultState, action) => {
                     return state;
                 });
 
+        case FETCH_GAMES:
+            GetGamesService();
+            return {...state};
         case UPDATED_GAMES:
             let games = GetGamesService();
             //todo fix this shit  https://www.valentinog.com/blog/react-redux-tutorial-beginners/
