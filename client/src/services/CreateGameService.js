@@ -1,4 +1,5 @@
-export const CreateGameService = async (data) => {
+export const CreateGameService = async data => {
+    const id = data.id;
     const name = data.name;
     const rating = data.rating;
     const genre = data.genre;
@@ -10,6 +11,7 @@ export const CreateGameService = async (data) => {
             'Accept': 'application/json',
         },
         body: JSON.stringify({
+            id: id,
             name: name,
             rating: rating,
             genre: genre,

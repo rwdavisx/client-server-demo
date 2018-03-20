@@ -1,23 +1,28 @@
-import {ADD_GAME, NEW_GAME_DETAILS_CHANGED} from '../actions/index'
+import {ADD_GAME, UPDATED_GAMES} from '../actions/index'
+import {CreateGameService} from '../../services/CreateGameService';
+import {GetGamesService} from "../../services/GetGamesService";
 
-const games = (state = [], action) => {
+const defaultState = {
+    games: []
+};
+
+const games = (state = defaultState, action) => {
     switch (action.type) {
         case ADD_GAME:
-            return [
-                ...state,
-                {
-                    id: action.payload.id,
-                    name: action.payload.name,
-                    rating: action.payload.rating,
-                    genre: action.payload.genre
-                }
-            ];
-        case NEW_GAME_DETAILS_CHANGED:
-            return state.form = {
-                name: action.payload.name,
-                rating: action.payload.rating,
-                genre: action.payload.genre
-            };
+            return CreateGameService(action.payload)
+                .then(() => {
+                    return {...state, games: [...state.games, action.payload]};
+                })
+                .catch(() => {
+                    alert('Could not submit new game!');
+                    return state;
+                });
+
+        case UPDATED_GAMES:
+            let games = GetGamesService();
+            //todo fix this shit  https://www.valentinog.com/blog/react-redux-tutorial-beginners/
+            return {...state, games: [games]};
+
         default:
             return state;
     }
