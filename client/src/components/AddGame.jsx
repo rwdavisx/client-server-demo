@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {addGame} from "../store/actions/index";
+//import {addGame} from "../store/actions/index";
 
 const mapDispatchToProps = dispatch => {
     return {
-        addGame: game => dispatch(addGame(game)),
+        addGame: game => {
+        }//dispatch(addGame(game)),
     };
 };
 
